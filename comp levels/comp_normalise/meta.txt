@@ -1,0 +1,11 @@
+kind = architecture
+title = "Vector Normalisation"
+tests = 128
+size = [-256, -256, 255, 255]
+dialogue = [
+  (info, "Read a vector in. This vector consists of an x and y 8.8 signed fixed point number.
+You should output the normalised vector, so the length of the vector is 1 +- 1/128."),
+  (info, `Read in 2 bytes (1st integer part, 2nd fractional part) that form the x component of the vector, in 8.8 signed form.
+Read in another, for y.
+Then output the components of the normalised vector to within 1/128 of the real output.`)
+]

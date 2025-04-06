@@ -1,0 +1,10 @@
+kind = architecture
+title = "Arbitrary Sum"
+tests = 128
+size = [-256, -256, 255, 255]
+dialogue = [
+  (info, "Read the first byte. This is how many bytes will need to be read. 
+Read all the successive bytes.
+Then output the sum of all these bytes as a 16 bit integer, the more significant part first."),
+  (info, "Specifically, each input byte should be treated as an 8 bit unsigned integer.")
+]

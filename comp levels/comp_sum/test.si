@@ -1,0 +1,46 @@
+const COUNT = 0
+const NUM = 1
+const SUM = 2
+const OUT = 3
+
+def arch_get_input($scratch_space: [Int], test: Int) Int {
+
+    if scratch_space[COUNT] == 0 {
+        scratch_space[NUM] = test
+        scratch_space[COUNT] += 1
+        return scratch_space[NUM]
+    }
+    if scratch_space[COUNT] == scratch_space[NUM] - 1 {
+        scratch_space[COUNT] += 1
+        return 0
+    }
+
+    scratch_space[COUNT] += 1
+    var value = random(256)
+    scratch_space[SUM] += value
+    return value
+}
+
+def arch_check_output($scratch_space: [Int], test: Int, input: Int, output: Int) TestResult {
+
+    if scratch_space[NUM] != scratch_space[COUNT] - 1 {
+        set_error(`You read the input {scratch_space[COUNT] - 1} times, not {output}.`)
+        return fail
+    }
+
+    switch scratch_space[OUT]
+        0 {
+            if output != scratch_space[SUM] / 256 {
+                set_error(`The higher byte {output} != {scratch_space[SUM] / 256}`)
+                return fail    
+            }
+            scratch_space[OUT] += 1
+            return pass
+        }
+        1 {
+            if output != scratch_space[SUM] % 256 {
+                set_error(`The lower byte {output} != {scratch_space[SUM] % 256}`)
+            }
+            return win
+        }
+}

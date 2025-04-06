@@ -1,0 +1,127 @@
+const COUNT = 0
+const X = 1
+const Y = 2
+const OUT = 3
+const OUTX = 4
+const OUTY = 5
+
+
+
+def arch_get_input($scratch_space: [Int], test: Int) Int {
+    var value = random(256)
+    const EDGE_CASES = [[0, 0, 0, 0], [0, 1, 0, 1], [1, 0, 0, 0], [0, 1, 0, 0], [127, 255, 0, 1]]
+    
+    if test < 5 {
+        value = EDGE_CASES[test][scratch_space[COUNT]]
+    }
+
+    switch scratch_space[COUNT]
+        0 {
+            scratch_space[X] = (value - 128) << 8
+        }
+        1 {
+            scratch_space[X] += value
+        }
+        2 {
+            scratch_space[Y] = (value - 128) << 8
+        }
+        3 {
+            scratch_space[Y] += value
+        }
+    scratch_space[COUNT] += 1
+
+    return value
+}
+
+def normalise($scratch_space: [Int]) {
+    var x = scratch_space[X]
+    var y = scratch_space[Y]
+
+    if x != 0 || y != 0 {
+
+        while x < 256 && y < 256 { //this is here to get some extra accuracy in the case X and Y are small
+            x = x << 1
+            y = y << 1
+        }
+
+        var lengthsq = ((x * x) >> 16) + ((y * y) >> 16)
+        var length = sqrt(lengthsq)
+
+        scratch_space[X] = (x << 16) / length
+        scratch_space[Y] = (y << 16) / length
+    }
+}
+
+def sqrt(num: Int) Int {
+    var iter = 256
+    var previter = 0
+    while iter != previter {
+        previter = iter
+        iter = (((num << 8) / iter) + iter) / 2
+    }
+    return iter
+}
+
+def arch_check_output($scratch_space: [Int], test: Int, input: Int, output: Int) TestResult {
+
+    if scratch_space[COUNT] != 4 {
+        set_error(`You did not read the input the right number of times ({scratch_space[COUNT]} instead of 4).`)
+        return fail
+    }
+
+    let xhi = scratch_space[X] >> 8
+    let yhi = scratch_space[Y] >> 8
+    var outsigned = output
+    if output >> 7 == 1 {
+        outsigned -= 256
+    }
+
+    switch scratch_space[OUT]
+        0 {
+            normalise($scratch_space)
+            print(`x: {scratch_space[X]}, y: {scratch_space[Y]}`)
+            scratch_space[OUTX] = outsigned << 8
+            // if outsigned != xhi {
+            //     set_error(`The higher byte of x {outsigned} != {xhi}`)
+            //     return fail    
+            // }
+            scratch_space[OUT] += 1
+            return pass
+        }
+        1 {
+            var outx = scratch_space[OUTX]
+            let xcalc = scratch_space[X]
+            outx += output
+            if (outx < xcalc - 4) || (outx > xcalc + 4) {
+                set_error(`x {outx} !≈ {xcalc}`)
+                return fail
+            }
+            scratch_space[OUT] += 1
+            return pass
+        }
+        2 {
+            scratch_space[OUTY] = outsigned << 8
+            // if scratch_space[OUTY] != yhi {
+            //     set_error(`The higher byte of y {scratch_space[OUTY]} != {yhi}`)
+            //     return fail    
+            // }
+            scratch_space[OUT] += 1
+            return pass
+        }
+        3 {
+            var outy = scratch_space[OUTY]
+            let ycalc = scratch_space[Y]
+            outy += output
+            if (outy < ycalc - 4) || (outy > ycalc + 4) {
+                set_error(`y {outy} !≈ {ycalc}`)
+                return fail
+            }
+            return win
+        }
+}
+
+def on_reset($scratch_space: [Int], test: Int) {
+    var x = 0x400
+    var root = sqrt(x)
+    print(`x: {x}, r: {root}`)
+}

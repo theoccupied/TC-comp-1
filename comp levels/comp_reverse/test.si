@@ -1,0 +1,45 @@
+const COUNT = 1
+
+def on_reset($scratch_space: [Int], test: Int) {
+    ui_set_hidden("note", true)
+}
+
+def arch_get_input($scratch_space: [Int], test: Int) Int {
+
+    scratch_space[0] = test
+    scratch_space[1] = 1
+
+    ui_set_text("goal", `What is reverse of {scratch_space[0]}?`)
+    ui_set_hidden("note", false)
+
+    return scratch_space[0]
+}
+
+def reverse_byte(byte: Int) Int {
+    let bit1 = (byte / 128) % 2
+    let bit2 = (byte / 64) % 2
+    let bit3 = (byte / 32) % 2
+    let bit4 = (byte / 16) % 2
+    let bit5 = (byte / 8) % 2
+    let bit6 = (byte / 4) % 2
+    let bit7 = (byte / 2) % 2
+    let bit8 = byte % 2
+    var byteout = (128 * bit8) + (64 * bit7) + (32 * bit6) + (16 * bit5) + (8 * bit4) + (4 * bit3) + (2 * bit2) + bit1
+    return byteout
+}
+
+def arch_check_output($scratch_space: [Int], test: Int, input: Int, output: Int) TestResult {
+
+    if scratch_space[COUNT] == 0 {
+        set_error(`You must read the input.`)
+        return fail
+    }
+
+    if output != reverse_byte(scratch_space[0]) {
+        set_error(`Reverse of {scratch_space[0]} = {reverse_byte(scratch_space[0])}`)
+        return fail
+    }
+
+    return win
+
+}
