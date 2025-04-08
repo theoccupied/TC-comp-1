@@ -1,6 +1,6 @@
 kind = architecture
 title = "Find the Pair"
-tests = 128
+tests = 255
 size = [-256, -256, 255, 255]
 dialogue = [
   (info, "Read the input byte until you find a byte that is the same as a previously input byte."),

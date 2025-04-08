@@ -1,31 +1,56 @@
 const COUNT = 0
 const NUM = 1
-const OUT = 2
-const PREV = 3
+const DUPE = 2
+const OVER = 3
+const PREV = 4
+
+def det_dupe(seed: Int) Int {
+    return (((seed + 3) * 276237) + 67) % (seed + 1)
+}
+
 
 def arch_get_input($scratch_space: [Int], test: Int) Int {
-    var value = random(256)
-    scratch_space[PREV + scratch_space[COUNT]] = value
-    var counter = 0
-    while counter < scratch_space[COUNT] {
-        if scratch_space[PREV + counter] == value {
-            scratch_space[NUM] = value
-            break
-        }
-        counter += 1
+    if scratch_space[DUPE] == 1 {
+        scratch_space[OVER] = 1
+        return test
     }
+    
+    var interrupted = false
+    var value = 0
+    if scratch_space[COUNT] == test + 1 { //creates a duplicate
+        value = scratch_space[PREV + det_dupe(COUNT)]
+        scratch_space[NUM] = value
+        scratch_space[DUPE] = 1
+    } else {
 
-
+        while interrupted { //avoids duplicates
+            value = random(256)
+            var counter = 0
+            while counter < scratch_space[COUNT] {
+                if scratch_space[PREV + counter] == value {
+                    interrupted = true
+                    break
+                }
+                counter += 1
+            }
+        }
+    }
+    scratch_space[PREV + scratch_space[COUNT]] = value
     scratch_space[COUNT] += 1
     return value
 }
 
 def arch_check_output($scratch_space: [Int], test: Int, input: Int, output: Int) TestResult {
-
-    if scratch_space[NUM] != scratch_space[COUNT] - 1 {
-        set_error(`You read the input {scratch_space[COUNT] - 1} times, not {output}.`)
-        return fail
+    if scratch_space[OVER] == 1 {
+        set_error(`The duplicate was a previous input. {output} is not the duplicate. {scratch_space[NUM]} is.`)
     }
-
     
+    if scratch_space[DUPE] == 1 {
+        if output == scratch_space[NUM] {
+            return win
+        }
+        set_error(`{output} is not the duplicate. {scratch_space[NUM]} is.`)
+    } 
+    set_error("There has not been a duplicate yet.")
+    return fail
 }
