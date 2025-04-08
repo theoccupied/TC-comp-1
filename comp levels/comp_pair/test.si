@@ -1,0 +1,31 @@
+const COUNT = 0
+const NUM = 1
+const OUT = 2
+const PREV = 3
+
+def arch_get_input($scratch_space: [Int], test: Int) Int {
+    var value = random(256)
+    scratch_space[PREV + scratch_space[COUNT]] = value
+    var counter = 0
+    while counter < scratch_space[COUNT] {
+        if scratch_space[PREV + counter] == value {
+            scratch_space[NUM] = value
+            break
+        }
+        counter += 1
+    }
+
+
+    scratch_space[COUNT] += 1
+    return value
+}
+
+def arch_check_output($scratch_space: [Int], test: Int, input: Int, output: Int) TestResult {
+
+    if scratch_space[NUM] != scratch_space[COUNT] - 1 {
+        set_error(`You read the input {scratch_space[COUNT] - 1} times, not {output}.`)
+        return fail
+    }
+
+    
+}
