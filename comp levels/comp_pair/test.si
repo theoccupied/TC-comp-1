@@ -15,7 +15,7 @@ def arch_get_input($scratch_space: [Int], test: Int) Int {
         return test
     }
     
-    var interrupted = false
+    var interrupted = true
     var value = 0
     if scratch_space[COUNT] == test + 1 { //creates a duplicate
         value = scratch_space[PREV + det_dupe(COUNT)]
