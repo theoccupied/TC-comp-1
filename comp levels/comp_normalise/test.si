@@ -17,13 +17,15 @@ def arch_get_input($scratch_space: [Int], test: Int) Int {
 
     switch scratch_space[COUNT]
         0 {
-            scratch_space[X] = (value - 128) << 8
+            value = value - 128
+            scratch_space[X] = (value) << 8 //* 256
         }
         1 {
             scratch_space[X] += value
         }
         2 {
-            scratch_space[Y] = (value - 128) << 8
+            value = value - 128
+            scratch_space[Y] = (value) << 8 //* 256
         }
         3 {
             scratch_space[Y] += value
@@ -38,25 +40,28 @@ def normalise($scratch_space: [Int]) {
     var x = scratch_space[X]
     var y = scratch_space[Y]
 
-    if x != 0 || y != 0 {
-
-        while x < 256 && y < 256 { //this is here to get some extra accuracy in the case X and Y are small
-            x = x << 1
-            y = y << 1
-        }
-
-        var lengthsq = ((x * x) >> 16) + ((y * y) >> 16)
-        var length = sqrt(lengthsq)
-
-        scratch_space[X] = (x << 16) / length
-        scratch_space[Y] = (y << 16) / length
+    if x == 0 && y == 0 {
+        // Zero vector is normalised to itself
+        return
     }
+
+    while abs(x) < 256 && abs(y) < 256 { // This is here to get some extra accuracy in the case X and Y are small
+        x = x << 1
+        y = y << 1
+    }
+    var lengthsq = ((x * x) >> 8) + ((y * y) >> 8)
+    var length = sqrt(lengthsq)
+
+    scratch_space[X] = (x << 8) / length
+    scratch_space[Y] = (y << 8) / length
 }
 
 def sqrt(num: Int) Int {
     var iter = 256
     var previter = 0
-    while iter != previter {
+    let delta = <U64> 1 // Accuracy. If this is zero iter can oscillate forever.
+
+    while abs(iter - previter) > delta {
         previter = iter
         iter = (((num << 8) / iter) + iter) / 2
     }
