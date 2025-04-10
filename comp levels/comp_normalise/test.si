@@ -11,7 +11,7 @@ def arch_get_input($scratch_space: [Int], test: Int) Int {
     var value = random(256)
     const EDGE_CASES = [[0, 0, 0, 0], [0, 1, 0, 1], [1, 0, 0, 0], [0, 1, 0, 0], [127, 255, 0, 1]]
     
-    if test < 5 {
+    if test < EDGE_CASES.len() {
         value = EDGE_CASES[test][scratch_space[COUNT]]
     }
 
@@ -27,6 +27,7 @@ def arch_get_input($scratch_space: [Int], test: Int) Int {
         }
         3 {
             scratch_space[Y] += value
+            ui_set_text("goal", `Normalise ({fp_to_str(scratch_space[X])}, {fp_to_str(scratch_space[Y])})`)
         }
     scratch_space[COUNT] += 1
 
@@ -79,7 +80,6 @@ def arch_check_output($scratch_space: [Int], test: Int, input: Int, output: Int)
     switch scratch_space[OUT]
         0 {
             normalise($scratch_space)
-            print(`x: {scratch_space[X]}, y: {scratch_space[Y]}`)
             scratch_space[OUTX] = outsigned << 8
             // if outsigned != xhi {
             //     set_error(`The higher byte of x {outsigned} != {xhi}`)
@@ -93,7 +93,7 @@ def arch_check_output($scratch_space: [Int], test: Int, input: Int, output: Int)
             let xcalc = scratch_space[X]
             outx += output
             if (outx < xcalc - 4) || (outx > xcalc + 4) {
-                set_error(`x {outx} !≈ {xcalc}`)
+                set_error(`x {fp_to_str(outx)} !≈ {fp_to_str(xcalc)} ({outx} !≈ {xcalc})`)
                 return fail
             }
             scratch_space[OUT] += 1
@@ -113,7 +113,7 @@ def arch_check_output($scratch_space: [Int], test: Int, input: Int, output: Int)
             let ycalc = scratch_space[Y]
             outy += output
             if (outy < ycalc - 4) || (outy > ycalc + 4) {
-                set_error(`y {outy} !≈ {ycalc}`)
+                set_error(`y {fp_to_str(outy)} !≈ {fp_to_str(ycalc)} ({outy} !≈ {ycalc})`)
                 return fail
             }
             return win
@@ -121,7 +121,30 @@ def arch_check_output($scratch_space: [Int], test: Int, input: Int, output: Int)
 }
 
 def on_reset($scratch_space: [Int], test: Int) {
-    var x = 0x400
-    var root = sqrt(x)
-    print(`x: {x}, r: {root}`)
+
+}
+
+def abs(x: Int) U64 {
+    let y = asr(x, 63)
+    return <U64> ((x ^ y) - y)
+}
+
+def fp_to_str(x: Int) String {
+// Convert a signed 8.8 fixed point number to a printable string
+// with 4 decimal places.
+
+    var fp = <S16> x
+    var sign = ""
+    if fp < 0 {
+        sign = "-"
+        fp = 0 - fp
+    }
+    let int_part = fp >> 8
+    let frac_part = (<U64>fp & 0xff) * 10000 / 256
+    let frac_part_1 = frac_part / 1000 % 10
+    let frac_part_2 = frac_part /  100 % 10
+    let frac_part_3 = frac_part /   10 % 10
+    let frac_part_4 = frac_part /    1 % 10
+    
+    return `{sign}{int_part}.{frac_part_1}{frac_part_2}{frac_part_3}{frac_part_4}`
 }
