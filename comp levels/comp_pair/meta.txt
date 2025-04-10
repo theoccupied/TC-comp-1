@@ -3,6 +3,6 @@ title = "Find the Pair"
 tests = 255
 size = [-256, -256, 255, 255]
 dialogue = [
-  (info, "Read the input byte until you find a byte that is the same as a previously input byte."),
-  (info, "In order to complete this you will have to store each byte and then compare them with each new byte that comes.")
+  (info, "Read the input byte until you find a byte that is the same as a previously input byte, which you then output."),
+  (info, "Fairly liberal usage of memory is recommended in this one. It's part of the minimum specs, anyway.")
 ]
