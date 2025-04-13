@@ -13,7 +13,7 @@ There are two main phases in the state of this competition: [Before Challenge Re
 
 ### ACR:
   Every challenge will be revealed, and every competitor must complete these challenges with the same architecture that they submitted, with no modifications apart from RAM contents.  
-  After completing each challenge, competitors should submit their code and ISA that they used to complete the challenge. I will then run the architectures on more comprehensive tests on my end, to verify that the challenges have been satisfactorily completed using the same architecture.  
+  After completing each challenge, competitors should submit their code and ISA that they used to complete the challenge. I will then run the architectures on more comprehensive tests on my end, to verify that the challenges have been satisfactorily completed using the same architecture. Challenge solutions should solve the general problem posed, not exploit limited test cases in `test.si`.  
   If a challenge completion fails verification the competitor will be informed of the problem so they can fix their solution.
   Once every competitor has finished (or otherwise decided to stop), scores will be counted up as the sum of in-game scores (with modifications as according to the second section of rules) over all challenges.  
   The overall winner is the competitor that has the lowest total score (I may announce other places for outstanding/unique performances).  
@@ -26,9 +26,11 @@ This section is subject to change if more cheese comes to my attention.
 
 No more than 1 architecture may be used to complete all the levels. If you submit more than 1 architecture, the most recent architecture submitted will be the one that is verified, unless it was submitted ACR.  
 
+Every architecture only needs to connect to an 8 bit input and an 8 bit output. No other I/O is required. SSD space is also not required.  
+
 Every architecture should have these minimum specs (the visible challenges are designed to all but force this):  
   - 16 bit or larger arithmetic ops
-  - 8 bit or larger logic ops
+  - 16 bit or larger logic ops
   - 256 bytes of memory, + registers
   - Must be turing complete (duh)
 
