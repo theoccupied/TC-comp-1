@@ -26,6 +26,8 @@ This section is subject to change if more cheese comes to my attention.
 
 No more than 1 architecture may be used to complete all the levels. If you submit more than 1 architecture, the most recent architecture submitted will be the one that is verified, unless it was submitted ACR.  
 
+Every architecture only needs to connect to an 8 bit input and an 8 bit output. No other I/O is required.
+
 Every architecture should have these minimum specs (the visible challenges are designed to all but force this):  
   - 16 bit or larger arithmetic ops
   - 8 bit or larger logic ops
