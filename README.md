@@ -30,7 +30,7 @@ Every architecture only needs to connect to an 8 bit input and an 8 bit output. 
 
 Every architecture should have these minimum specs (the visible challenges are designed to all but force this):  
   - 16 bit or larger arithmetic ops
-  - 8 bit or larger logic ops
+  - 16 bit or larger logic ops
   - 256 bytes of memory, + registers
   - Must be turing complete (duh)
 
