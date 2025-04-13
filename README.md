@@ -35,3 +35,12 @@ Ignore these minimum specs at your own risk. At the same time, these are still n
 
 RAM will be scored differently in this competition. A new alpha version will come out with fixed scoring for RAM before the competition starts, and thus that scoring will be used.  
 
+### Cheese Blacklist
+  I expect everyone to be sensible about this, but I will lay the rules out anyway.  
+  It's likely a lot of the scoring-related cheese will get patched out before the competition starts, but I'm covering all my bases here.
+
+  - No bugs or glitches.
+  - No free OR gates.
+  - No free AND gates.
+  - No free (A && ¬B) gates.
+  - For that matter, no free gates whatsoever.
