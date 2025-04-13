@@ -71,8 +71,6 @@ def arch_check_output($scratch_space: [Int], test: Int, input: Int, output: Int)
                 set_error(`Reverse of byte {scratch_space[IN2]} = {reverse_byte(scratch_space[IN1])}, not {output}`)
                 return fail
             }
+            return win
         }
-
-    return win
-
 }
