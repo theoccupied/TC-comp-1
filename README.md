@@ -4,7 +4,7 @@ Playing these challenges is as simple as putting the folders into your Turing Co
 
 # Main Rules
 This competition takes place in the Alpha branch, since it is the one that custom levels can be made for.  
-There are two main phases in the state of this competition: [Before Challenge Reveal](main/README.md#bcr) and [After Challenge Reveal](main/README.md#acr).
+There are two main phases in the state of this competition: [Before Challenge Reveal](/README.md#bcr) and [After Challenge Reveal](/README.md#acr).
 
 ### BCR:
   Only 'visible' challenges can be viewed and worked through (these are the ones available on the repo right now).  
