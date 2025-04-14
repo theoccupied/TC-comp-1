@@ -95,7 +95,7 @@ def arch_check_output($scratch_space: [Int], test: Int, input: Int, output: Int)
     switch scratch_space[OCOUNT]
         0 {
             if trimout != reverse_byte(scratch_space[IN2]) {
-                set_error(`Reverse of {view_pattern(scratch_space[IN1], scratch_space[IN2])} = {view_pattern(reverse_byte(scratch_space[IN2]), reverse_byte(scratch_space[IN1]))}, not {view_byte(trimout)}////////`)
+                set_error(`Reverse of {view_pattern(scratch_space[IN1], scratch_space[IN2])} = {view_pattern(reverse_byte(scratch_space[IN2]), reverse_byte(scratch_space[IN1]))}, not {view_byte(trimout)}--------`)
                 return fail
             }
             scratch_space[GIVEN] = trimout
