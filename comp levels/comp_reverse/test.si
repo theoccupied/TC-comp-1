@@ -26,7 +26,7 @@ def arch_get_input($scratch_space: [Int], test: Int) Int {
         1 {
             input = test
             scratch_space[IN2] = input
-            ui_set_text("goal", `What is reverse of {scratch_space[IN1] << 8 + scratch_space[IN2]}?`)
+            ui_set_text("goal", `What is reverse of {view_pattern(scratch_space[IN1], scratch_space[IN2])}?`)
             ui_set_hidden("note", false)
             scratch_space[COUNT] += 1
             return scratch_space[IN2]
