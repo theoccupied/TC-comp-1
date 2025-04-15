@@ -6,9 +6,8 @@ const OCOUNT = 3
 const GIVEN = 5
 
 def det_in(test: Int) Int {
-    return ((test * 85) ^ (test * 1356)) % 256
+    return (((test * 85) ^ (test * 1356)) + (test / 256)) % 256
 }
-
 def on_reset($scratch_space: [Int], test: Int) {
     ui_set_hidden("note", true)
 }
