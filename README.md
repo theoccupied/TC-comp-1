@@ -31,7 +31,8 @@ Every architecture only needs to connect to an 8 bit input and an 8 bit output. 
 Every architecture should have these minimum specs (the visible challenges are designed to all but force this):  
   - 16 bit or larger arithmetic ops
   - 16 bit or larger logic ops
-  - 256 bytes of memory, + registers
+  - 256 bytes of memory, + additional registers for shuffling data and holding addresses and counters.
+  - Space for >1000 <ins>instructions</ins> (especially important if your architecture is not very powerful)
   - Must be turing complete (duh)
 
 Ignore these minimum specs at your own risk. At the same time, these are still not ideal specs. They will just allow you to complete all the challenges.  
