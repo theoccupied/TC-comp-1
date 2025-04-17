@@ -1,6 +1,6 @@
 # TC-comp-1
 The main repository for accessing challenges for the first architecture building competition in Turing Complete.  
-Playing these challenges is as simple as putting the folders into your Turing Complete campaign folder, then loading them with the console. 
+Playing these challenges is as simple as putting the folders into your Turing Complete campaign folder, then loading them with the console (comp_1 is the menu to access all other challenges, so that's a good pick). 
 
 # Main Rules
 This competition takes place in the Alpha branch, since it is the one that custom levels can be made for.  
