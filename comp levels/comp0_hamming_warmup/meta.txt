@@ -1,0 +1,12 @@
+kind = architecture
+title = "Hamming Codes"
+tests = 1024
+size = [-256, -256, 255, 255]
+no_score = true
+dialogue = [
+  (info, "(These instructions aren't the final version, you'll need an understanding of Hamming Codes to complete this challenge until then.)"),
+  (info, "Read a 57 bit unsigned int and create a 63/57 hamming code with SECDED for it.
+You should output the encoded 64 bit value as little endian"),
+  (info, `Read in 8 bytes that form the 57 bit unsigned integer in little endian order (low bytes are read in first).
+Then output the 64 bit 63/57 hamming code with SECDED in little endian order.`)
+]

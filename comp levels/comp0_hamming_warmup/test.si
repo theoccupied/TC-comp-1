@@ -1,0 +1,87 @@
+const IN_COUNT = 0
+const VALUE = 1
+const HAMMING_VALUE = 2
+const OUT_COUNT = 4
+const OUT_VALUE = 5
+
+
+
+def arch_get_input($scratch_space: [Int], test: Int) Int {
+    var value = random(0x0200_0000_0000_0000)
+
+    if scratch_space[IN_COUNT] == 0 {
+        scratch_space[VALUE] = value
+
+        let hamming_code = convert_to_hamming_code(value)
+        scratch_space[HAMMING_VALUE] = hamming_code
+    } else {
+        value = scratch_space[VALUE]
+    }
+
+    if scratch_space[IN_COUNT] == 7 {
+        ui_set_text("goal", `Output the 63/57 hamming code with SECDED for {value}`)
+    }
+
+    value = (value >> (8 * scratch_space[IN_COUNT])) & 0xFF
+    scratch_space[IN_COUNT] += 1
+
+    return value
+}
+
+def convert_to_hamming_code(num: Int) U64 {
+    var data = <U64>num & 0x01FF_FFFF_FFFF_FFFF
+    data = ((data & 0x01FF_FFFF_FC00_0000) << 6) | ((data & 0x3FF_F800) << 5) | ((data & 0x7F0) << 4) | ((data & 0xE) << 3) | ((data & 0x1) << 2)
+    data = generate_parity(data)
+
+    return data
+}
+
+def generate_parity(num: U64) U64 {
+    var data = num
+    let p1 = popcount(data & 0x5555_5555_5555_5555) & 1
+    let p2 = popcount(data & 0x6666_6666_6666_6666) & 1
+    let p4 = popcount(data & 0x7878_7878_7878_7878) & 1
+    let p8 = popcount(data & 0x7F80_7F80_7F80_7F80) & 1
+    let p16 = popcount(data & 0x7FFF_8000_7FFF_8000) & 1
+    let p32 = popcount(data & 0x7FFF_FFFF_8000_0000) & 1
+    data = data | p1 | (p2 << 1) | (p4 << 3) | (p8 << 7) | (p16 << 15) | (p32 << 31)
+    let parity = popcount(data) & 1
+    
+    return data | (parity << 63)
+}
+
+def popcount(num: U64) U64 {
+    var i = num
+    i = i - ((i >> 1) & 0x5555_5555_5555_5555)
+    i = (i & 0x3333_3333_3333_3333) + ((i >> 2) & 0x3333_3333_3333_3333)
+    return (((i + (i >> 4)) & 0xF0F_0F0F_0F0F_0F0F) * 0x101_0101_0101_0101) >> 56
+}
+
+def arch_check_output($scratch_space: [Int], test: Int, input: Int, output: Int) TestResult {
+
+    if scratch_space[IN_COUNT] != 8 {
+        set_error(`You did not read the input the right number of times ({scratch_space[IN_COUNT]} instead of 8).`)
+        return fail
+    }
+
+    var value = scratch_space[OUT_VALUE]
+    value = value | ((output & 0xFF) << (8 * scratch_space[OUT_COUNT]))
+
+    if scratch_space[OUT_COUNT] == 7 {
+        if value == scratch_space[HAMMING_VALUE] {
+            return win
+        } else {
+            set_error(`Got {value} but expected {scratch_space[HAMMING_VALUE]}`)
+            return fail
+        }
+    }
+
+    scratch_space[OUT_VALUE] = value
+    scratch_space[OUT_COUNT] += 1
+
+    return pass
+}
+
+def on_reset($scratch_space: [Int], test: Int) {
+
+}
