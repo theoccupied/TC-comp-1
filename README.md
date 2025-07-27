@@ -37,6 +37,12 @@ Every architecture should have these minimum specs (the visible challenges are d
 
 Ignore these minimum specs at your own risk. At the same time, these are still not ideal specs. They will just allow you to complete all the challenges.  
 
+Aiming higher than minimum specs, the competition will be geared towards architectures that are:
+- Arithmetically capable
+- Flexible and free of limitations
+And, of course, very optimised.
+My goal is not to promote the architecture that most closely matches the minimum specs, my goal is to find the architecture capable of tackling any problem (within reason).
+
 RAM will be scored differently in this competition. A new alpha version will come out with fixed scoring for RAM before the competition starts, and thus that scoring will be used.  
 
 ### Cheese Blacklist
