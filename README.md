@@ -40,6 +40,7 @@ Ignore these minimum specs at your own risk. At the same time, these are still n
 Aiming higher than minimum specs, the competition will be geared towards architectures that are:
 - Arithmetically capable
 - Flexible and free of limitations
+
 And, of course, very optimised.
 My goal is not to promote the architecture that most closely matches the minimum specs, my goal is to find the architecture capable of tackling any problem (within reason).
 
