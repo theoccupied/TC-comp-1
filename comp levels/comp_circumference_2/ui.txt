@@ -1,0 +1,2 @@
+[text id="pointer" text="v" size=22 y=100 font=mono]
+[text id="text" text="" size=22 y=120 font=mono]

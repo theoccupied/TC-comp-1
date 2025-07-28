@@ -1,0 +1,32 @@
+kind = architecture
+title = "Calibrating Laser Cannons 2"
+tests = 200
+size = [-256, -256, 255, 255]
+dialogue = [
+  (alien_centered, "Remember our ship's laser cannons for shooting at asteroids?
+Well - Their calibration circuit broke again."),
+  (alien_centered, "This time not only the radius circuitry broke, but the whole calibration system.
+A replacement for it would need to be able to calculate a series of formulas."),
+  (info, "The formulas you will get are already transformed into Reverse Polish Notation.
+RPN is a notation where first you state the operands, and the operator is after them, and not between like in standard infix notation.
+
+Example in infix (standard) notation:
+3 + (4 * 5)
+The same formula in RPN:
+3 4 5 * +"),
+  (info, "When you encounter an operation, you take the 2 last operands you've encountered, calculate the result and store it instead of the operands and the operation"),
+  (alien, "Your computer will receive an ASCII text describing a formula in Reverse Polish Notation, and should return the result of evaluating that formula. Here is a list of the operations we support:
+
+[code]
+add +
+sub -
+or  |
+and &
+xor ^
+lsl <<
+lsr >>
+[/code]
+
+  "),
+  (info, "The only difference here is that the I/O is 8 bit, so you will have to split the 16 bit answer into two bytes to output, with the first byte being the higher portion.")
+]
