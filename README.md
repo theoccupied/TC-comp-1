@@ -1,6 +1,8 @@
 # TC-comp-1
 The main repository for accessing challenges for the first architecture building competition in Turing Complete.  
-Playing these challenges is as simple as putting the folders into your Turing Complete campaign folder, then loading them with the console (comp_1 is the menu to access all other challenges, so that's a good pick). 
+Playing these challenges is as simple as putting the folders into your Turing Complete campaign folder, then loading them with the console (comp_1 is the menu to access all other challenges, so that's a good pick).  
+If you wish to take part in the competition, tell me (clearly and directly, please), and I will incorporate you into the official text file with a number.  
+If you have any questions, just ask me and I'll explain what and why.  
 
 # Main Rules
 This competition takes place in the Alpha branch, since it is the one that custom levels can be made for.  
@@ -36,6 +38,13 @@ Every architecture should have these minimum specs (the visible challenges are d
   - Must be turing complete (duh)
 
 Ignore these minimum specs at your own risk. At the same time, these are still not ideal specs. They will just allow you to complete all the challenges.  
+
+Aiming higher than minimum specs, the competition will be geared towards architectures that are:
+- Arithmetically capable
+- Flexible and free of limitations
+
+And, of course, very optimised.
+My goal is not to promote the architecture that most closely matches the minimum specs, my goal is to find the architecture capable of tackling any problem (within reason).
 
 RAM will be scored differently in this competition. A new alpha version will come out with fixed scoring for RAM before the competition starts, and thus that scoring will be used.  
 
