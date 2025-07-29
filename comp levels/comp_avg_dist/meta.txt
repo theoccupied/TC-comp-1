@@ -1,0 +1,12 @@
+kind = architecture
+title = "Average Distance"
+tests = 256
+size = [-256, -256, 255, 255]
+dialogue = [
+  (alien_centered, "We like stargazing as much as any interstellar species, which means we also like identifying and cataloguing constellations. One of the ways we can do this is with the average distance between the closest stars in a constellation. Whether this is a good identifier is not the point right now - I just want to see how well your computer manages it!"),
+  (info, "Read in a byte telling you how many stars there are. 
+Then for every star, read in 6 bytes corresponding to 8.8 x, y, and z coords, with the higher byte first."),
+  (info, `For each star, find the star closest to it, and calculate the distance between them.
+Then, calculate the average of all of those distances, and output that 8.8 number, higher byte first.`)
+  (info, `Considering calculating 3-dimensional distances between every pair is a pretty expensive task, you probably want to optimise the algorithm quite a bit.`)
+]

@@ -1,0 +1,203 @@
+type Fixed S16
+
+var inputlen = 1
+const OUTPUT = 2
+const OUTPUTLEN = 2
+const INPUT = OUTPUT + OUTPUTLEN
+const INPUTCOUNT = 0
+const OUTPUTCOUNT = 1
+const FP = <Fixed> 0
+var stars = array(30, FP)   //every 3 is one star - x, y and z
+var starcount = 0
+
+
+
+
+binary +(a: Fixed, b: Fixed) Fixed {
+    return a + b
+}
+
+binary -(a: Fixed, b: Fixed) Fixed {
+    return a - b
+}
+
+binary *(a: Fixed, b: Fixed) Fixed {
+    return <Fixed>((<S32>a * <S32>b) >> 8)
+}
+
+binary /(a: Fixed, b: Fixed) Fixed {
+    return <Fixed>((<S32>a << 8) / <S16>b)
+}
+
+binary <<(a: Fixed, b: Int) Fixed {
+    return <Fixed>(<S16>a << b)
+}
+
+binary >>(a: Fixed, b: Int) Fixed {
+    return <Fixed>(<S16>a >> b)
+}
+
+
+def normalise($x: Fixed, $y: Fixed) {
+
+    if (<S16> x == 0) && (<S16> y == 0) {
+        // Zero vector is normalised to itself
+        return
+    }
+
+    while (<S16> abs(x) < 256) && (<S16> abs(y) < 256) { // This is here to get some extra accuracy in the case X and Y are small
+        x = x << 1
+        y = y << 1
+    }
+    var lengthsq = ((x * x) >> 8) + ((y * y) >> 8)
+    var length = sqrt(lengthsq)
+
+    x = (x << 8) / length
+    y = (y << 8) / length
+}
+
+def sqrt(num: Fixed) Fixed {
+    var iter = <Fixed>256
+    var previter = <Fixed>0
+    let delta = <U64> 1 // Accuracy. If this is zero iter can oscillate forever.
+
+    while <U64>(abs(iter - previter)) > delta {
+        previter = iter
+        iter = ((num / iter) + iter) / <Fixed>512
+    }
+    return iter
+}
+
+
+def abs(x: Int) U64 {
+    let y = asr_64(x, 63)
+    return <U64> ((x ^ y) - y)
+}
+
+def abs(x: Fixed) Fixed {
+    let z = <Int>x
+    let y = asr_64(z, 63)
+    return <Fixed> ((z ^ y) - y)
+}
+
+def fp_to_str(x: Fixed) String {
+// Convert a signed 8.8 fixed point number to a printable string
+// with 4 decimal places.
+
+    var fp = <S16> x
+    var sign = ""
+    if fp < 0 {
+        sign = "-"
+        fp = <S16> 0 - fp
+    }
+    let int_part = fp >> 8
+    let frac_part = (fp & 0xff) * 10000 / 256
+    let frac_part_1 = frac_part / 1000 % 10
+    let frac_part_2 = frac_part /  100 % 10
+    let frac_part_3 = frac_part /   10 % 10
+    let frac_part_4 = frac_part /    1 % 10
+    
+    return `{sign}{int_part}.{frac_part_1}{frac_part_2}{frac_part_3}{frac_part_4}`
+}
+
+
+
+
+
+
+
+def hash16(input: U32, key: U32) U32 {
+    let hash = <U32> (input * key)
+    return ((hash >> 16) ^ hash) & 0xFFFF
+}
+
+
+def wyhash16(x: U16) U16 {
+    let y = <U32> x + 0xfc15
+    return <U16> hash16(<U32> x, <U32> 0x2ab)
+}
+
+def create_star($scratch_space: [Int], test: Int) {
+    let x = <Fixed> wyhash16(<U16> test)
+    let y = <Fixed> wyhash16(<U16> x)
+    let z = <Fixed> wyhash16(<U16> y)
+    .stars[.starcount] = x
+    .stars[.starcount + 1] = y
+    .stars[.starcount + 2] = z
+    .starcount = .starcount + 1
+    scratch_space[.inputlen] = <Int> x >> 8
+    scratch_space[.inputlen + 1] = <Int> (<U16> x & 0xff)
+    scratch_space[.inputlen + 2] = <Int> y >> 8
+    scratch_space[.inputlen + 3] = <Int> (<U16> y & 0xff)
+    scratch_space[.inputlen + 4] = <Int> z >> 8
+    scratch_space[.inputlen + 5] = <Int> (<U16> z & 0xff)
+}
+
+def star_dist(x1: Fixed, y1: Fixed, z1: Fixed, x2: Fixed, y2: Fixed, z2: Fixed) Fixed {
+    let xdiff = x1 - x2
+    let ydiff = y1 - y2
+    let zdiff = z1 - z2
+    return sqrt(xdiff * xdiff + ydiff * ydiff + zdiff * zdiff)
+}
+
+def create_input($scratch_space: [Int], test: Int) {
+    let numstars = test % 8 + 3 //range from 3 to 10
+    scratch_space[INPUT] = numstars
+    while (.inputlen - 1) / 6 < numstars {
+        create_star($scratch_space, test)
+        .inputlen = .inputlen + 6
+    }
+}
+
+def create_output($scratch_space: [Int], test: Int) {
+    var i = 0
+    var distsums = <Fixed> 0
+    while i < .starcount {
+        var j = i + 1
+        let i3 = i * 3
+        while j < .starcount {  
+            let j3 = j * 3
+            let x1 = .stars[i3]
+            let y1 = .stars[i3 + 1]
+            let z1 = .stars[i3 + 2]
+            let x2 = .stars[j3]
+            let y2 = .stars[j3 + 1]
+            let z2 = .stars[j3 + 2]
+            distsums = distsums + star_dist(x1, y1, z1, x2, y2, z2)
+            j = j + 1
+        }
+        i = i + 1
+    }
+    let avg = <Fixed> (<Int> distsums / .starcount)
+    scratch_space[OUTPUT] = <Int> avg >> 8
+    scratch_space[OUTPUT + 1] = <Int> avg & 0xff
+}
+
+def arch_get_input($scratch_space: [Int], test: Int) Int {
+    let count = scratch_space[INPUTCOUNT]
+    scratch_space[INPUTCOUNT] = count + 1
+    return scratch_space[INPUT + count]
+}
+
+def arch_check_output($scratch_space: [Int], test: Int, input: Int, output: Int) TestResult {
+    if (scratch_space[INPUTCOUNT] != .inputlen) {
+        set_error("Did not read the input the correct number of times.")
+        return fail
+    }
+    let expected = scratch_space[OUTPUT + scratch_space[OUTPUTCOUNT]]
+    if (output != expected) {
+        set_error(`{output} != {expected}`)
+        return fail
+    }
+    scratch_space[OUTPUTCOUNT] = scratch_space[OUTPUTCOUNT] + 1
+    if (scratch_space[OUTPUTCOUNT] == OUTPUTLEN) {
+        return win
+    }
+    return pass
+}   
+
+
+def on_reset($scratch_space: [Int], test: Int) {
+    create_input($scratch_space, test)
+    create_output($scratch_space, test)
+}
