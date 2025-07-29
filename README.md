@@ -57,3 +57,5 @@ RAM will be scored differently in this competition. A new alpha version will com
   - No free AND gates.
   - No free (A && ¬B) gates.
   - For that matter, no free gates whatsoever.
+
+For the sake of clarity, by free OR gates I am not referring to the use of switches. That is intended behaviour. This blacklist is against unintended behaviour.
