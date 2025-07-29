@@ -3,6 +3,7 @@ title = "Arbitrary Sum"
 tests = 128
 size = [-256, -256, 255, 255]
 dialogue = [
+  (alien_centered, "We want to track how much energy your computer uses over time, and we thought it would be cool if your computer tracked itself. So we've connected the output of the wire probe to the input."),
   (info, "Read the first byte. This is how many bytes will need to be read. 
 Read all the successive bytes.
 Then output the sum of all these bytes as a 16 bit integer, the more significant part first."),
