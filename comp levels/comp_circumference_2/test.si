@@ -213,14 +213,14 @@ def make_formula($scratch_space: [Int], answer_idx: Int) String {
 
                 OP_LSL {
 
-                    top_of_stack = a << (b & 0x3f)
+                    top_of_stack = a << (b & 0x0f)
                     formula += " <<"
 
                 }
 
                 OP_LSR {
 
-                    top_of_stack = a >> (b & 0x3f)
+                    top_of_stack = a >> (b & 0x0f)
                     formula += " >>"
 
                 }
