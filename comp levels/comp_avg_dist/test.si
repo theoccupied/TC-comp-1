@@ -176,7 +176,7 @@ def create_output($scratch_space: [Int], test: Int) {
 def arch_get_input($scratch_space: [Int], test: Int) Int {
     let count = scratch_space[INPUTCOUNT]
     scratch_space[INPUTCOUNT] = count + 1
-    return scratch_space[INPUT + count]
+    return scratch_space[INPUT + count - 1]
 }
 
 def arch_check_output($scratch_space: [Int], test: Int, input: Int, output: Int) TestResult {
