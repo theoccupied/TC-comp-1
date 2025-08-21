@@ -14,11 +14,11 @@ var starcount = 0
 
 
 binary +(a: Fixed, b: Fixed) Fixed {
-    return a + b
+    return <Fixed>(<S16>a + <S16>b)
 }
 
 binary -(a: Fixed, b: Fixed) Fixed {
-    return a - b
+    return <Fixed>(<S16>a - <S16>b)
 }
 
 binary *(a: Fixed, b: Fixed) Fixed {
@@ -26,7 +26,7 @@ binary *(a: Fixed, b: Fixed) Fixed {
 }
 
 binary /(a: Fixed, b: Fixed) Fixed {
-    return <Fixed>((<S32>a << 8) / <S16>b)
+    return <Fixed>((<S32>a << 8) / <S32>b)
 }
 
 binary <<(a: Fixed, b: Int) Fixed {
@@ -91,7 +91,7 @@ def fp_to_str(x: Fixed) String {
         fp = <S16> 0 - fp
     }
     let int_part = fp >> 8
-    let frac_part = (fp & 0xff) * 10000 / 256
+    let frac_part = (<Int>fp & 0xff) * 10000 / 256
     let frac_part_1 = frac_part / 1000 % 10
     let frac_part_2 = frac_part /  100 % 10
     let frac_part_3 = frac_part /   10 % 10
@@ -114,7 +114,7 @@ def hash16(input: U32, key: U32) U32 {
 
 def wyhash16(x: U16) U16 {
     let y = <U32> x + 0xfc15
-    return <U16> hash16(<U32> x, <U32> 0x2ab)
+    return <U16> hash16(<U32> y, <U32> 0x2ab)
 }
 
 def create_star($scratch_space: [Int], test: Int) {
@@ -198,6 +198,9 @@ def arch_check_output($scratch_space: [Int], test: Int, input: Int, output: Int)
 
 
 def on_reset($scratch_space: [Int], test: Int) {
+    inputlen = 1
+    starcount = 0
+    stars = array(30, FP)
     create_input($scratch_space, test)
     create_output($scratch_space, test)
 }
