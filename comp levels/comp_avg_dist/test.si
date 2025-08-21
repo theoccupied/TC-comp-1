@@ -198,9 +198,9 @@ def arch_check_output($scratch_space: [Int], test: Int, input: Int, output: Int)
 
 
 def on_reset($scratch_space: [Int], test: Int) {
-    inputlen = 1
-    starcount = 0
-    stars = array(30, FP)
+    .inputlen = 1
+    .starcount = 0
+    .stars = array(30, FP)
     create_input($scratch_space, test)
     create_output($scratch_space, test)
 }
