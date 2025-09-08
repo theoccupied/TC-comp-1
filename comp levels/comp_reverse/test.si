@@ -1,9 +1,5 @@
 const COUNT = 1
 const IN1 = 0
-const IN2 = 4
-const OUT = 2
-const OCOUNT = 3
-const GIVEN = 5
 
 def det_in(test: Int) Int {
     return (((test * 85) ^ (test * 1356)) + (test / 256)) % 256
@@ -13,24 +9,8 @@ def on_reset($scratch_space: [Int], test: Int) {
 }
 
 def arch_get_input($scratch_space: [Int], test: Int) Int {
-
-    var input = 0
-    switch scratch_space[COUNT]
-        0 {
-            input = det_in(test)
-            scratch_space[IN1] = input
-            scratch_space[COUNT] += 1
-            return scratch_space[IN1]
-        }
-        1 {
-            input = test
-            scratch_space[IN2] = input
-            ui_set_text("goal", `What is reverse of 0b{view_pattern(scratch_space[IN1], scratch_space[IN2])}?`)
-            ui_set_hidden("note", false)
-            scratch_space[COUNT] += 1
-            return scratch_space[IN2]
-        }
-    
+    scratch_space[IN1] = (det_in(test) << 8) + test
+    return scratch_space[IN1]
 }
 
 def reverse_byte(byte: Int) Int {
@@ -80,32 +60,22 @@ def view_byte(byte: Int) String {
 
 def arch_check_output($scratch_space: [Int], test: Int, input: Int, output: Int) TestResult {
 
-    let trimout = output & 0xff
+    let trimout = output & 0xffff
 
     if scratch_space[COUNT] == 0 {
         set_error(`You must read the input.`)
         return fail
     }
-    if scratch_space[COUNT] != 2 {
+    if scratch_space[COUNT] != 1 {
         set_error(`You did not read the input the correct number of times.`)
         return fail
     }
 
-    switch scratch_space[OCOUNT]
-        0 {
-            if trimout != reverse_byte(scratch_space[IN2]) {
-                set_error(`Reverse of 0b{view_pattern(scratch_space[IN1], scratch_space[IN2])} = 0b{view_pattern(reverse_byte(scratch_space[IN2]), reverse_byte(scratch_space[IN1]))}, not 0b{view_byte(trimout)}????????`)
-                return fail
-            }
-            scratch_space[GIVEN] = trimout
-            scratch_space[OCOUNT] += 1
-            return pass
-        }
-        1 {
-            if trimout != reverse_byte(scratch_space[IN1]) {
-                set_error(`Reverse of 0b{view_pattern(scratch_space[IN1], scratch_space[IN2])} = 0b{view_pattern(reverse_byte(scratch_space[IN2]), reverse_byte(scratch_space[IN1]))}, not 0b{view_pattern(scratch_space[GIVEN], trimout)}`)
-                return fail
-            }
-            return win
-        }
+    
+    if trimout != reverse_byte(scratch_space[IN1] & 0xff) << 8 + reverse_byte(scratch_space[IN1] >> 8) {
+        set_error(`Reverse of 0b{view_pattern(scratch_space[IN1] >> 8, scratch_space[IN1] & 0xff)} = 0b{view_pattern(reverse_byte(scratch_space[IN1] & 0xff), reverse_byte(scratch_space[IN1] >> 8))}, not 0b{view_pattern(trimout >> 8, trimout & 0xff)}`)
+        return fail
+    }
+    return win
+    
 }
