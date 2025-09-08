@@ -28,7 +28,8 @@ This section is subject to change if more cheese comes to my attention.
 
 No more than 1 architecture may be used to complete all the levels. If you submit more than 1 architecture, the most recent architecture submitted will be the one that is verified, unless it was submitted ACR.  
 
-Every architecture only needs to connect to an 8 bit input and an 8 bit output. No other I/O is required. SSD space is also not required.  
+Every architecture only needs to connect to an 16 bit input and a 16 bit output (this can be buffered if needed). No other I/O is required. SSD space is also not required.  
+Optionally, an architecture can use larger bit width inputs and/or outputs if the challenge supports it. A list of supported bit widths is shown at the end of each challenge dialogue, and if your architecture's input/output width is larger or the same size as a supported bit width, that bit width can be used. Generally you want to aim for the highest bit width available. (Currently some challenges do not work this way - I am in the process of converting all the challenges to this standard.)  
 
 Every architecture should have these minimum specs (the visible challenges are designed to all but force this):  
   - 16 bit or larger arithmetic ops
