@@ -7,6 +7,8 @@ dialogue = [
   (alien_centered, "On our ship we naturally need to reverse some data, given different transfer methods."),
   (alien_centered, "We want your computer to perform this, since it's here."),
   (alien_centered, "Send the answer to output when it has been calculated, of course."),
-  (info_centered, "Take 2 bytes as input, reverse the order of the bits (across both bytes, as a 16 bit unit), and send the resultant bytes to the output."),
+  (info_centered, "Take a 16 bit input, reverse the order of the bits, and send the resultant word to the output."),
   (info_centered, "For example, 0x0001 becomes 0x8000.")
+  (info_centered, "Accepted bus widths: 16 (NULL).
+The challenge is not designed to handle being told any data width, even if it's 16 bit anyway.")
 ]
