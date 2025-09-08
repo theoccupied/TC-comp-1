@@ -10,6 +10,7 @@ def on_reset($scratch_space: [Int], test: Int) {
 
 def arch_get_input($scratch_space: [Int], test: Int) Int {
     scratch_space[IN1] = (det_in(test) << 8) + test
+    scratch_space[COUNT] = scratch_space[COUNT] + 1
     return scratch_space[IN1]
 }
 
