@@ -2,6 +2,7 @@ kind = architecture
 title = "Bit reverse"
 tests = 1024
 size = [-256, -256, 255, 255]
+arch_input_word_size = 16
 dialogue = [
   (alien_centered, "On our ship we naturally need to reverse some data, given different transfer methods."),
   (alien_centered, "We want your computer to perform this, since it's here."),
